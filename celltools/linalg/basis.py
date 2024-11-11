@@ -403,7 +403,7 @@ class Plane:
     """
     def __init__(self, origin: Vector, normal: Vector):
 
-        if origin.basis == normal.basis:
+        if np.all(origin.basis == normal.basis):
             self._origin = origin
             self._normal = normal
             self._define_basis()
@@ -511,24 +511,6 @@ class Plane:
                 self._basis.permute((2, 3, 1))
             if not self.parametric_form[1] == 0:
                 self._basis.permute((1, 3, 2))
-
-            self._basis.offset = self.origin.global_coord
-        # parallel to x,y or z axis
-        elif np.count_nonzero(self.parametric_form[:-1] == 0) == 1:
-            if self.parametric_form[0] == 0:  # x-axis
-                self._basis = Basis(
-                    [0, np.sqrt(2), np.sqrt(2)], [0, -1 * np.sqrt(2), np.sqrt(2)], [1, 0, 0]
-                )
-
-            elif self.parametric_form[1] == 0:  # y-axis
-                self._basis = Basis(
-                    [np.sqrt(2), 0, np.sqrt(2)], [np.sqrt(2), 0, -1 * np.sqrt(2)], [0, 1, 0]
-                )
-
-            elif self.parametric_form[2] == 0:  # z-axis
-                self._basis = Basis(
-                    [np.sqrt(2), np.sqrt(2), 0], [-1 * np.sqrt(2), np.sqrt(2), 0], [0, 0, 1],
-                )
 
             self._basis.offset = self.origin.global_coord
             # plane with no restrictions
